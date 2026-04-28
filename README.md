@@ -1,6 +1,6 @@
-# Custom Fontmaxxxing
+# Custom Handwritten Font Maker
 
-Turn your handwriting into a real, installable font — right from your browser... for free!!
+Turn your handwriting into a real, installable font — right from your browser... for FREE! for all the fontmaxxxxers out there ✊✊✊
 
 Draw each character on a guided canvas, preview your font in real time, and export a `.otf` file you can install in Font Book and use in Google Docs, Microsoft Word, Photoshop, or any app that supports custom fonts.
 
