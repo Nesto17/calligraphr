@@ -1,6 +1,6 @@
-# Doodle Font Maker
+# Custom Fontmaxxxing
 
-Turn your handwriting into a real, installable font — right from your browser.
+Turn your handwriting into a real, installable font — right from your browser... for free!!
 
 Draw each character on a guided canvas, preview your font in real time, and export a `.otf` file you can install in Font Book and use in Google Docs, Microsoft Word, Photoshop, or any app that supports custom fonts.
 
@@ -13,23 +13,6 @@ Draw each character on a guided canvas, preview your font in real time, and expo
 - **Export .otf** — Download a real OpenType font file. Double-click it to install via Font Book and use it everywhere.
 - **Fully Client-Side** — No server, no uploads. Everything runs in your browser using [opentype.js](https://opentype.js.org/).
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js >= 20.9.0 (use `nvm use` if you have [nvm](https://github.com/nvm-sh/nvm) — there's an `.nvmrc` included)
-
-### Install & Run
-
-```bash
-git clone https://github.com/Nesto17/calligraphr.git
-cd calligraphr
-npm install
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
 ## How to Use
 
 1. Click **Start Creating!** on the landing page.
@@ -41,16 +24,6 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 7. Check the **Preview** section at the bottom to see your font in action.
 8. Click **Download Font (.otf)** to export your font.
 9. Double-click the `.otf` file to install it via Font Book (macOS).
-
-## Tech Stack
-
-| Layer | Technology |
-|-------|------------|
-| Framework | Next.js (App Router) |
-| Language | TypeScript |
-| Styling | Tailwind CSS |
-| Font Generation | opentype.js |
-| Font | Patrick Hand (via next/font) |
 
 ## Project Structure
 
