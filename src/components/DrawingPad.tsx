@@ -38,58 +38,48 @@ export default function DrawingPad({ character, initialStrokes, onSave }: Drawin
 
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-    // Draw notebook paper background
-    ctx.fillStyle = '#FFF8F0';
+    // Clean white background
+    ctx.fillStyle = '#FFFFFF';
     ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-    // Horizontal ruled lines (faint)
-    for (let y = GUIDE_LINES.ascender; y <= GUIDE_LINES.descender; y += 20) {
-      ctx.strokeStyle = '#E8DDD0';
-      ctx.lineWidth = 0.5;
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(CANVAS_WIDTH, y);
-      ctx.stroke();
+    // Subtle grid dots
+    ctx.fillStyle = '#E4E4E7';
+    for (let x = 20; x < CANVAS_WIDTH; x += 20) {
+      for (let y = 20; y < CANVAS_HEIGHT; y += 20) {
+        ctx.beginPath();
+        ctx.arc(x, y, 0.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
 
     // Guide lines
-    const guides = [
-      { y: GUIDE_LINES.ascender, color: '#457B9D', label: 'ascender', dash: [6, 4] },
-      { y: GUIDE_LINES.capHeight, color: '#E63946', label: 'cap', dash: [6, 4] },
-      { y: GUIDE_LINES.xHeight, color: '#F4A261', label: 'x-height', dash: [4, 4] },
-      { y: GUIDE_LINES.baseline, color: '#E63946', label: 'baseline', dash: [] as number[] },
-      { y: GUIDE_LINES.descender, color: '#457B9D', label: 'descender', dash: [6, 4] },
+    const guides: { y: number; color: string; label: string; dashed: boolean }[] = [
+      { y: GUIDE_LINES.ascender, color: '#D4714E', label: 'ascender', dashed: true },
+      { y: GUIDE_LINES.capHeight, color: '#8B7EC8', label: 'cap', dashed: true },
+      { y: GUIDE_LINES.xHeight, color: '#E09D4A', label: 'x-height', dashed: true },
+      { y: GUIDE_LINES.baseline, color: '#D4714E', label: 'baseline', dashed: false },
+      { y: GUIDE_LINES.descender, color: '#8B7EC8', label: 'descender', dashed: true },
     ];
 
     for (const guide of guides) {
-      ctx.strokeStyle = guide.color;
-      ctx.lineWidth = guide.dash.length ? 1 : 1.5;
-      ctx.setLineDash(guide.dash);
+      ctx.strokeStyle = guide.color + '40';
+      ctx.lineWidth = guide.dashed ? 0.75 : 1.25;
+      ctx.setLineDash(guide.dashed ? [6, 4] : []);
       ctx.beginPath();
       ctx.moveTo(0, guide.y);
       ctx.lineTo(CANVAS_WIDTH, guide.y);
       ctx.stroke();
       ctx.setLineDash([]);
 
-      ctx.fillStyle = guide.color;
-      ctx.font = '10px sans-serif';
-      ctx.fillText(guide.label, 4, guide.y - 4);
+      ctx.fillStyle = guide.color + '80';
+      ctx.font = '9px system-ui, sans-serif';
+      ctx.fillText(guide.label, 6, guide.y - 4);
     }
-
-    // Draw left margin line
-    ctx.strokeStyle = '#E6939A';
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.moveTo(40, 0);
-    ctx.lineTo(40, CANVAS_HEIGHT);
-    ctx.stroke();
 
     // Draw strokes
     for (const stroke of strokes) {
       drawStroke(ctx, stroke);
     }
-
-    // Draw current stroke
     if (currentPoints.length > 0) {
       drawStroke(ctx, { points: currentPoints, width: penSize });
     }
@@ -101,8 +91,8 @@ export default function DrawingPad({ character, initialStrokes, onSave }: Drawin
 
   function drawStroke(ctx: CanvasRenderingContext2D, stroke: Stroke) {
     if (stroke.points.length === 0) return;
-    ctx.strokeStyle = '#2B2B2B';
-    ctx.fillStyle = '#2B2B2B';
+    ctx.strokeStyle = '#1A1A1A';
+    ctx.fillStyle = '#1A1A1A';
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     ctx.lineWidth = stroke.width;
@@ -148,11 +138,11 @@ export default function DrawingPad({ character, initialStrokes, onSave }: Drawin
 
     if (tool === 'eraser') {
       const threshold = 20;
-      const remaining = strokes.filter((stroke) => {
-        return !stroke.points.some(
+      const remaining = strokes.filter((stroke) =>
+        !stroke.points.some(
           (p) => Math.abs(p.x - pos.x) < threshold && Math.abs(p.y - pos.y) < threshold
-        );
-      });
+        )
+      );
       if (remaining.length !== strokes.length) {
         setUndoStack([...undoStack, strokes]);
         setStrokes(remaining);
@@ -186,9 +176,8 @@ export default function DrawingPad({ character, initialStrokes, onSave }: Drawin
 
   function handleUndo() {
     if (undoStack.length === 0) return;
-    const prev = undoStack[undoStack.length - 1];
+    setStrokes(undoStack[undoStack.length - 1]);
     setUndoStack(undoStack.slice(0, -1));
-    setStrokes(prev);
   }
 
   function handleClear() {
@@ -208,51 +197,48 @@ export default function DrawingPad({ character, initialStrokes, onSave }: Drawin
     : 'Draw between the x-height and baseline';
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      <div className="text-center">
-        <div className="inline-block bg-[#E63946] text-white px-6 py-2 rounded-full text-2xl font-bold shadow-lg transform -rotate-1">
-          Draw: <span className="text-4xl">{character}</span>
-        </div>
-        <p className="text-sm text-gray-500 mt-2 font-hand">{hint}</p>
+    <div className="flex flex-col items-center gap-5">
+      {/* Character label */}
+      <div className="flex items-center gap-4">
+        <span className="text-5xl font-accent text-[#D4714E]">{character}</span>
+        <span className="text-sm text-[#A1A1AA]">{hint}</span>
       </div>
 
       {/* Toolbar */}
-      <div className="flex items-center gap-3 bg-white/80 px-4 py-2 rounded-full shadow-md border-2 border-dashed border-[#457B9D]">
-        <div className="flex gap-1">
-          {PEN_SIZES.map((size) => (
-            <button
-              key={size.label}
-              onClick={() => { setTool('pen'); setPenSize(size.value); }}
-              className={`w-9 h-9 rounded-full border-2 font-bold text-sm transition-all ${
-                tool === 'pen' && penSize === size.value
-                  ? 'bg-[#457B9D] text-white border-[#457B9D] scale-110'
-                  : 'bg-white text-[#457B9D] border-[#457B9D] hover:bg-[#457B9D]/10'
-              }`}
-            >
-              {size.label}
-            </button>
-          ))}
-        </div>
+      <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-xl border border-[#E4E4E7] shadow-sm">
+        {PEN_SIZES.map((size) => (
+          <button
+            key={size.label}
+            onClick={() => { setTool('pen'); setPenSize(size.value); }}
+            className={`w-8 h-8 rounded-lg text-xs font-semibold transition-all ${
+              tool === 'pen' && penSize === size.value
+                ? 'bg-[#1A1A1A] text-white'
+                : 'text-[#71717A] hover:bg-[#F4F4F5]'
+            }`}
+          >
+            {size.label}
+          </button>
+        ))}
 
-        <div className="w-px h-6 bg-gray-300" />
+        <div className="w-px h-5 bg-[#E4E4E7] mx-1" />
 
         <button
           onClick={() => setTool('eraser')}
-          className={`px-3 py-1.5 rounded-full border-2 font-bold text-sm transition-all ${
+          className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
             tool === 'eraser'
-              ? 'bg-[#F4A261] text-white border-[#F4A261] scale-105'
-              : 'bg-white text-[#F4A261] border-[#F4A261] hover:bg-[#F4A261]/10'
+              ? 'bg-[#D4714E] text-white'
+              : 'text-[#71717A] hover:bg-[#F4F4F5]'
           }`}
         >
           Eraser
         </button>
 
-        <div className="w-px h-6 bg-gray-300" />
+        <div className="w-px h-5 bg-[#E4E4E7] mx-1" />
 
         <button
           onClick={handleUndo}
           disabled={undoStack.length === 0}
-          className="px-3 py-1.5 rounded-full border-2 border-gray-400 text-gray-600 font-bold text-sm hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed"
+          className="px-3 py-1.5 rounded-lg text-xs font-semibold text-[#71717A] hover:bg-[#F4F4F5] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
           Undo
         </button>
@@ -260,14 +246,14 @@ export default function DrawingPad({ character, initialStrokes, onSave }: Drawin
         <button
           onClick={handleClear}
           disabled={strokes.length === 0}
-          className="px-3 py-1.5 rounded-full border-2 border-[#E63946] text-[#E63946] font-bold text-sm hover:bg-[#E63946]/10 disabled:opacity-30 disabled:cursor-not-allowed"
+          className="px-3 py-1.5 rounded-lg text-xs font-semibold text-[#D4714E] hover:bg-[#D4714E]/5 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
           Clear
         </button>
       </div>
 
       {/* Canvas */}
-      <div className="relative border-3 border-[#2B2B2B] rounded-lg shadow-[4px_4px_0px_#2B2B2B] bg-white overflow-hidden">
+      <div className="rounded-2xl border border-[#E4E4E7] shadow-sm overflow-hidden bg-white">
         <canvas
           ref={canvasRef}
           width={CANVAS_WIDTH}
@@ -284,12 +270,12 @@ export default function DrawingPad({ character, initialStrokes, onSave }: Drawin
         />
       </div>
 
-      {/* Save button */}
+      {/* Save */}
       <button
         onClick={handleSave}
-        className="bg-[#457B9D] text-white px-8 py-3 rounded-full text-lg font-bold shadow-[3px_3px_0px_#2B2B2B] border-2 border-[#2B2B2B] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_#2B2B2B] transition-all active:translate-y-[3px] active:shadow-none"
+        className="bg-[#1A1A1A] hover:bg-[#2A2A2A] text-white px-6 py-2.5 rounded-full text-sm font-medium transition-colors shadow-sm"
       >
-        Save Character
+        Save character
       </button>
     </div>
   );

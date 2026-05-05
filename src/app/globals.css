@@ -1,42 +1,34 @@
 @import "tailwindcss";
 
 :root {
-  --background: #FFF5E6;
-  --foreground: #2B2B2B;
+  --color-accent: #D4714E;
+  --color-accent-hover: #C4623F;
+  --color-lavender: #8B7EC8;
+  --color-gold: #E09D4A;
+  --color-surface: #FFFFFF;
+  --color-bg: #FAFAF8;
+  --color-border: #E4E4E7;
+  --color-text: #1A1A1A;
+  --color-text-secondary: #71717A;
+  --color-text-muted: #A1A1AA;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-hand: var(--font-hand);
+  --font-sans: var(--font-sans);
+  --font-accent: var(--font-accent);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-hand), Arial, Helvetica, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
 }
 
-/* Notebook paper background pattern */
-.notebook-bg {
-  background-color: #FFF5E6;
-  background-image:
-    linear-gradient(#F0E4D4 1px, transparent 1px);
-  background-size: 100% 28px;
+.font-accent {
+  font-family: var(--font-accent), cursive;
 }
 
-/* Doodly border style */
-.doodle-border {
-  border: 3px solid #2B2B2B;
-  border-radius: 12px;
-  box-shadow: 4px 4px 0px #2B2B2B;
-}
-
-/* Scrollbar styling */
 .scrollbar-thin::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 
 .scrollbar-thin::-webkit-scrollbar-track {
@@ -44,52 +36,10 @@ body {
 }
 
 .scrollbar-thin::-webkit-scrollbar-thumb {
-  background: #D4C4B0;
-  border-radius: 3px;
+  background: #D4D4D8;
+  border-radius: 2px;
 }
 
 .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background: #B8A896;
-}
-
-/* Wiggle animation for fun elements */
-@keyframes wiggle {
-  0%, 100% { transform: rotate(-2deg); }
-  50% { transform: rotate(2deg); }
-}
-
-.wiggle {
-  animation: wiggle 2s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
-}
-
-.float {
-  animation: float 3s ease-in-out infinite;
-}
-
-/* Sticker button style */
-.sticker-btn {
-  display: inline-block;
-  padding: 12px 32px;
-  border: 3px solid #2B2B2B;
-  border-radius: 50px;
-  font-weight: 800;
-  font-size: 1.25rem;
-  box-shadow: 4px 4px 0px #2B2B2B;
-  transition: all 0.15s ease;
-  cursor: pointer;
-}
-
-.sticker-btn:hover {
-  transform: translateY(2px);
-  box-shadow: 2px 2px 0px #2B2B2B;
-}
-
-.sticker-btn:active {
-  transform: translateY(4px);
-  box-shadow: none;
+  background: #A1A1AA;
 }

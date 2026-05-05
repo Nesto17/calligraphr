@@ -1,16 +1,20 @@
 import type { Metadata } from "next";
-import { Patrick_Hand } from "next/font/google";
+import { Inter, Caveat } from "next/font/google";
 import "./globals.css";
 
-const handFont = Patrick_Hand({
-  weight: "400",
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-hand",
+  variable: "--font-sans",
+});
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  variable: "--font-accent",
 });
 
 export const metadata: Metadata = {
-  title: "Doodle Font Maker",
-  description: "Create your own handwritten font from doodles",
+  title: "Calligraphr",
+  description: "Turn your handwriting into a real, installable font",
 };
 
 export default function RootLayout({
@@ -19,8 +23,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${handFont.variable} h-full`}>
-      <body className="min-h-full flex flex-col font-hand">{children}</body>
+    <html lang="en" className={`${inter.variable} ${caveat.variable} h-full`}>
+      <body className="min-h-full flex flex-col font-sans bg-[#FAFAF8] text-[#1A1A1A] antialiased">
+        {children}
+      </body>
     </html>
   );
 }

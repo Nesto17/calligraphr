@@ -47,20 +47,19 @@ export default function Preview({ fontName, characters }: PreviewProps) {
   }, [fontName, characters]);
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold text-[#2B2B2B] font-hand">Preview</h2>
-        <div className="flex items-center gap-2">
-          <label className="text-sm text-gray-500">Size:</label>
+        <h2 className="text-sm font-semibold text-[#1A1A1A]">Preview</h2>
+        <div className="flex items-center gap-3">
           <input
             type="range"
             min={24}
             max={96}
             value={fontSize}
             onChange={(e) => setFontSize(Number(e.target.value))}
-            className="w-24 accent-[#E63946]"
+            className="w-20 accent-[#D4714E]"
           />
-          <span className="text-sm font-bold text-[#457B9D] w-8">{fontSize}</span>
+          <span className="text-xs text-[#A1A1AA] tabular-nums w-6">{fontSize}</span>
         </div>
       </div>
 
@@ -69,24 +68,24 @@ export default function Preview({ fontName, characters }: PreviewProps) {
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder="Type something to preview..."
-        className="w-full px-4 py-2 rounded-full border-2 border-dashed border-[#F4A261] bg-white focus:outline-none focus:border-solid focus:border-[#E63946] text-[#2B2B2B] font-hand"
+        className="w-full px-4 py-2.5 rounded-xl border border-[#E4E4E7] bg-white text-sm text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-[#D4714E]/20 focus:border-[#D4714E] transition-all placeholder:text-[#D4D4D8]"
       />
 
       <div
-        className="bg-white rounded-lg border-2 border-[#2B2B2B] shadow-[3px_3px_0px_#2B2B2B] p-6 min-h-[120px] flex items-center justify-center"
+        className="bg-white rounded-2xl border border-[#E4E4E7] shadow-sm p-8 min-h-[120px] flex items-center justify-center"
         style={{
           fontFamily: fontUrl ? 'DoodlePreview, sans-serif' : 'sans-serif',
           fontSize: `${fontSize}px`,
           lineHeight: 1.4,
-          color: '#2B2B2B',
+          color: '#1A1A1A',
           wordBreak: 'break-word',
         }}
       >
         {fontUrl ? (
           text || 'Type something above...'
         ) : (
-          <span className="text-gray-400 font-hand text-lg">
-            Draw some characters to see a preview!
+          <span className="text-[#D4D4D8] text-base font-sans">
+            Draw some characters to see a preview
           </span>
         )}
       </div>

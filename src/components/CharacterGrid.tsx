@@ -16,24 +16,24 @@ function CharacterSection({
   characters,
   activeCharacter,
   onSelect,
-  color,
+  dotColor,
 }: {
   title: string;
   chars: string[];
   characters: Map<string, Stroke[]>;
   activeCharacter: string | null;
   onSelect: (char: string) => void;
-  color: string;
+  dotColor: string;
 }) {
   return (
     <div>
-      <h3
-        className="text-sm font-bold mb-2 px-2 py-1 rounded-full inline-block"
-        style={{ backgroundColor: color, color: 'white' }}
-      >
-        {title}
-      </h3>
-      <div className="grid grid-cols-9 gap-1.5">
+      <div className="flex items-center gap-2 mb-2">
+        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: dotColor }} />
+        <h3 className="text-xs font-semibold text-[#A1A1AA] uppercase tracking-wider">
+          {title}
+        </h3>
+      </div>
+      <div className="grid grid-cols-9 gap-1">
         {chars.map((char) => {
           const hasDrawing = (characters.get(char)?.length ?? 0) > 0;
           const isActive = activeCharacter === char;
@@ -41,12 +41,12 @@ function CharacterSection({
             <button
               key={char}
               onClick={() => onSelect(char)}
-              className={`relative aspect-square rounded-lg border-2 font-bold text-lg transition-all flex items-center justify-center ${
+              className={`relative aspect-square rounded-lg text-sm font-medium transition-all flex items-center justify-center ${
                 isActive
-                  ? 'border-[#2B2B2B] bg-[#F4A261] text-white scale-105 shadow-[2px_2px_0px_#2B2B2B]'
+                  ? 'bg-[#1A1A1A] text-white shadow-sm'
                   : hasDrawing
-                    ? 'border-[#457B9D] bg-[#457B9D]/10 text-[#457B9D] hover:scale-105'
-                    : 'border-dashed border-gray-300 text-gray-400 hover:border-[#F4A261] hover:text-[#F4A261] hover:scale-105'
+                    ? 'bg-white border border-[#E4E4E7] text-[#1A1A1A] hover:border-[#D4714E]/40'
+                    : 'bg-transparent text-[#A1A1AA] hover:bg-white hover:text-[#71717A] border border-transparent hover:border-[#E4E4E7]'
               }`}
             >
               {hasDrawing ? (
@@ -54,8 +54,11 @@ function CharacterSection({
               ) : (
                 char
               )}
-              {hasDrawing && (
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border border-white" />
+              {hasDrawing && !isActive && (
+                <div
+                  className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full border border-white"
+                  style={{ backgroundColor: dotColor }}
+                />
               )}
             </button>
           );
@@ -70,30 +73,38 @@ export default function CharacterGrid({ characters, activeCharacter, onSelect }:
   const total = UPPERCASE.length + LOWERCASE.length + DIGITS.length;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold text-[#2B2B2B] font-hand">Characters</h2>
-        <span className="text-sm bg-white px-3 py-1 rounded-full border-2 border-dashed border-[#457B9D] font-bold text-[#457B9D]">
+        <h2 className="text-sm font-semibold text-[#1A1A1A]">Characters</h2>
+        <span className="text-xs text-[#A1A1AA] tabular-nums">
           {totalDrawn}/{total}
         </span>
       </div>
 
-      <div className="space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto pr-2 scrollbar-thin">
+      {/* Progress bar */}
+      <div className="h-1 bg-[#F4F4F5] rounded-full overflow-hidden">
+        <div
+          className="h-full bg-[#D4714E] rounded-full transition-all duration-300"
+          style={{ width: `${(totalDrawn / total) * 100}%` }}
+        />
+      </div>
+
+      <div className="space-y-5 max-h-[calc(100vh-220px)] overflow-y-auto pr-1 scrollbar-thin">
         <CharacterSection
-          title="UPPERCASE"
+          title="Uppercase"
           chars={UPPERCASE}
           characters={characters}
           activeCharacter={activeCharacter}
           onSelect={onSelect}
-          color="#E63946"
+          dotColor="#D4714E"
         />
         <CharacterSection
-          title="lowercase"
+          title="Lowercase"
           chars={LOWERCASE}
           characters={characters}
           activeCharacter={activeCharacter}
           onSelect={onSelect}
-          color="#457B9D"
+          dotColor="#8B7EC8"
         />
         <CharacterSection
           title="Numbers"
@@ -101,7 +112,7 @@ export default function CharacterGrid({ characters, activeCharacter, onSelect }:
           characters={characters}
           activeCharacter={activeCharacter}
           onSelect={onSelect}
-          color="#F4A261"
+          dotColor="#E09D4A"
         />
       </div>
     </div>
