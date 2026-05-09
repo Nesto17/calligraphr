@@ -9,7 +9,7 @@ import {
   canvasToFontY,
 } from './constants';
 
-function strokesToGlyphPath(strokes: Stroke[]): Path {
+function strokesToGlyphPath(strokes: Stroke[], xOffset: number): Path {
   const path = new opentype.Path();
 
   for (const stroke of strokes) {
@@ -17,7 +17,7 @@ function strokesToGlyphPath(strokes: Stroke[]): Path {
     if (outline.length === 0) continue;
 
     const fontPoints = outline.map((p) => ({
-      x: Math.round(canvasToFontX(p.x)),
+      x: Math.round(canvasToFontX(p.x) - xOffset),
       y: Math.round(canvasToFontY(p.y)),
     }));
 
@@ -31,16 +31,27 @@ function strokesToGlyphPath(strokes: Stroke[]): Path {
   return path;
 }
 
-function computeAdvanceWidth(strokes: Stroke[]): number {
-  if (strokes.length === 0) return 500;
-  let maxX = 0;
+const SIDE_BEARING = 20;
+
+function computeGlyphMetrics(strokes: Stroke[]): { xOffset: number; advanceWidth: number } {
+  if (strokes.length === 0) return { xOffset: 0, advanceWidth: 500 };
+
+  let minX = Infinity;
+  let maxX = -Infinity;
+
   for (const stroke of strokes) {
-    for (const point of stroke.points) {
-      const fx = canvasToFontX(point.x);
-      if (fx > maxX) maxX = fx;
+    const fontHalfW = canvasToFontX(stroke.width / 2);
+    for (const p of stroke.points) {
+      const fx = canvasToFontX(p.x);
+      if (fx - fontHalfW < minX) minX = fx - fontHalfW;
+      if (fx + fontHalfW > maxX) maxX = fx + fontHalfW;
     }
   }
-  return Math.max(Math.round(maxX + 80), 200);
+
+  return {
+    xOffset: minX - SIDE_BEARING,
+    advanceWidth: Math.max(Math.round(maxX - minX + SIDE_BEARING * 2), 200),
+  };
 }
 
 export function generateFont(
@@ -77,11 +88,12 @@ export function generateFont(
 
   characters.forEach((strokes, char) => {
     if (strokes.length === 0) return;
-    const path = strokesToGlyphPath(strokes);
+    const { xOffset, advanceWidth } = computeGlyphMetrics(strokes);
+    const path = strokesToGlyphPath(strokes, xOffset);
     const glyph = new opentype.Glyph({
       name: char.length === 1 ? char : `char_${char}`,
       unicode: char.charCodeAt(0),
-      advanceWidth: computeAdvanceWidth(strokes),
+      advanceWidth,
       path,
     });
     glyphs.push(glyph);

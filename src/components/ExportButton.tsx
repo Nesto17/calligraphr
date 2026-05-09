@@ -30,9 +30,10 @@ export default function ExportButton({ fontName, characters }: ExportButtonProps
     <button
       onClick={handleExport}
       disabled={drawnCount === 0}
-      className="bg-[#D4714E] hover:bg-[#C4623F] text-white px-5 py-2 rounded-full text-sm font-medium transition-colors shadow-sm disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-[#D4714E]"
+      className="bg-[#D4714E] hover:bg-[#C4623F] active:bg-[#B5573A] active:scale-[0.97] text-white px-3 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-colors shadow-sm disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-[#D4714E]"
     >
-      Download .otf
+      <span className="sm:hidden">Export</span>
+      <span className="hidden sm:inline">Download .otf</span>
     </button>
   );
 }

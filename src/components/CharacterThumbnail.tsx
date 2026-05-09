@@ -2,7 +2,7 @@
 
 import { useRef, useEffect } from 'react';
 import { Stroke } from '@/types';
-import { CANVAS_WIDTH, CANVAS_HEIGHT } from '@/lib/constants';
+import { CANVAS_SIZE } from '@/lib/constants';
 
 interface CharacterThumbnailProps {
   strokes: Stroke[];
@@ -20,8 +20,7 @@ export default function CharacterThumbnail({ strokes }: CharacterThumbnailProps)
     const size = 40;
     ctx.clearRect(0, 0, size, size);
 
-    const scaleX = size / CANVAS_WIDTH;
-    const scaleY = size / CANVAS_HEIGHT;
+    const scale = size / CANVAS_SIZE;
 
     ctx.strokeStyle = '#2B2B2B';
     ctx.fillStyle = '#2B2B2B';
@@ -30,13 +29,13 @@ export default function CharacterThumbnail({ strokes }: CharacterThumbnailProps)
 
     for (const stroke of strokes) {
       if (stroke.points.length === 0) continue;
-      ctx.lineWidth = Math.max(stroke.width * scaleX, 1);
+      ctx.lineWidth = Math.max(stroke.width * scale, 1);
 
       if (stroke.points.length === 1) {
         ctx.beginPath();
         ctx.arc(
-          stroke.points[0].x * scaleX,
-          stroke.points[0].y * scaleY,
+          stroke.points[0].x * scale,
+          stroke.points[0].y * scale,
           ctx.lineWidth / 2,
           0,
           Math.PI * 2
@@ -46,9 +45,9 @@ export default function CharacterThumbnail({ strokes }: CharacterThumbnailProps)
       }
 
       ctx.beginPath();
-      ctx.moveTo(stroke.points[0].x * scaleX, stroke.points[0].y * scaleY);
+      ctx.moveTo(stroke.points[0].x * scale, stroke.points[0].y * scale);
       for (let i = 1; i < stroke.points.length; i++) {
-        ctx.lineTo(stroke.points[i].x * scaleX, stroke.points[i].y * scaleY);
+        ctx.lineTo(stroke.points[i].x * scale, stroke.points[i].y * scale);
       }
       ctx.stroke();
     }

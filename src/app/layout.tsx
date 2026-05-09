@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Caveat } from "next/font/google";
+import { Inter, Newsreader } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -7,7 +7,7 @@ const inter = Inter({
   variable: "--font-sans",
 });
 
-const caveat = Caveat({
+const newsreader = Newsreader({
   subsets: ["latin"],
   variable: "--font-accent",
 });
@@ -23,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${caveat.variable} h-full`}>
+    <html lang="en" className={`${inter.variable} ${newsreader.variable} h-full`}>
       <body className="min-h-full flex flex-col font-sans bg-[#FAFAF8] text-[#1A1A1A] antialiased">
         {children}
       </body>

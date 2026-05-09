@@ -47,19 +47,19 @@ export default function Preview({ fontName, characters }: PreviewProps) {
   }, [fontName, characters]);
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-[#1A1A1A]">Preview</h2>
-        <div className="flex items-center gap-3">
+    <div className="flex flex-col h-full p-4 md:p-0">
+      <div className="flex items-center justify-between pb-3 shrink-0">
+        <h2 className="text-base font-semibold text-[#1A1A1A]">Preview</h2>
+        <div className="flex items-center gap-2">
           <input
             type="range"
-            min={24}
-            max={96}
+            min={20}
+            max={72}
             value={fontSize}
             onChange={(e) => setFontSize(Number(e.target.value))}
-            className="w-20 accent-[#D4714E]"
+            className="w-16 accent-[#D4714E] h-1"
           />
-          <span className="text-xs text-[#A1A1AA] tabular-nums w-6">{fontSize}</span>
+          <span className="text-sm text-[#A1A1AA] tabular-nums w-5">{fontSize}</span>
         </div>
       </div>
 
@@ -67,12 +67,12 @@ export default function Preview({ fontName, characters }: PreviewProps) {
         type="text"
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder="Type something to preview..."
-        className="w-full px-4 py-2.5 rounded-xl border border-[#E4E4E7] bg-white text-sm text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-[#D4714E]/20 focus:border-[#D4714E] transition-all placeholder:text-[#D4D4D8]"
+        placeholder="Type to preview..."
+        className="w-full px-3 py-2 rounded-lg border border-[#E4E4E7] bg-white text-sm text-[#1A1A1A] focus:outline-none focus:ring-2 focus:ring-[#D4714E]/20 focus:border-[#D4714E] transition-all placeholder:text-[#D4D4D8] mb-3 shrink-0"
       />
 
       <div
-        className="bg-white rounded-2xl border border-[#E4E4E7] shadow-sm p-8 min-h-[120px] flex items-center justify-center"
+        className="bg-white rounded-2xl border border-[#E4E4E7] shadow-sm p-6 flex items-center justify-center overflow-auto min-h-[200px] md:min-h-0 flex-1"
         style={{
           fontFamily: fontUrl ? 'DoodlePreview, sans-serif' : 'sans-serif',
           fontSize: `${fontSize}px`,
@@ -84,7 +84,7 @@ export default function Preview({ fontName, characters }: PreviewProps) {
         {fontUrl ? (
           text || 'Type something above...'
         ) : (
-          <span className="text-[#D4D4D8] text-base font-sans">
+          <span className="text-[#D4D4D8] text-sm font-sans">
             Draw some characters to see a preview
           </span>
         )}

@@ -4,7 +4,7 @@ function distance(a: Point, b: Point): number {
   return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
 }
 
-function createCircle(center: Point, radius: number, segments = 12): Point[] {
+function createCircle(center: Point, radius: number, segments = 16): Point[] {
   const points: Point[] = [];
   for (let i = 0; i < segments; i++) {
     const angle = (i / segments) * Math.PI * 2;
@@ -25,6 +25,20 @@ function simplifyPoints(points: Point[], minDistance: number): Point[] {
     }
   }
   result.push(points[points.length - 1]);
+  return result;
+}
+
+function semicircle(center: Point, from: Point, segments: number): Point[] {
+  const startAngle = Math.atan2(from.y - center.y, from.x - center.x);
+  const radius = distance(center, from);
+  const result: Point[] = [];
+  for (let i = 1; i < segments; i++) {
+    const angle = startAngle - (Math.PI * i) / segments;
+    result.push({
+      x: center.x + Math.cos(angle) * radius,
+      y: center.y + Math.sin(angle) * radius,
+    });
+  }
   return result;
 }
 
@@ -81,40 +95,17 @@ export function strokeToOutline(stroke: Stroke): Point[] {
     });
   }
 
-  // Add rounded end caps
-  const startCap = createRoundCap(points[0], rightSide[0], leftSide[0], 6);
-  const endCap = createRoundCap(
+  const endCap = semicircle(
     points[points.length - 1],
     leftSide[leftSide.length - 1],
-    rightSide[rightSide.length - 1],
-    6
+    12
+  );
+
+  const startCap = semicircle(
+    points[0],
+    rightSide[0],
+    12
   );
 
   return [...leftSide, ...endCap, ...rightSide.reverse(), ...startCap];
-}
-
-function createRoundCap(
-  center: Point,
-  from: Point,
-  to: Point,
-  segments: number
-): Point[] {
-  const startAngle = Math.atan2(from.y - center.y, from.x - center.x);
-  const endAngle = Math.atan2(to.y - center.y, to.x - center.x);
-  const radius = distance(center, from);
-
-  let angleDiff = endAngle - startAngle;
-  if (angleDiff < 0) angleDiff += Math.PI * 2;
-  if (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
-
-  const points: Point[] = [];
-  for (let i = 1; i < segments; i++) {
-    const t = i / segments;
-    const angle = startAngle + angleDiff * t;
-    points.push({
-      x: center.x + Math.cos(angle) * radius,
-      y: center.y + Math.sin(angle) * radius,
-    });
-  }
-  return points;
 }
