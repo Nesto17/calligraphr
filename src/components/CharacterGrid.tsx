@@ -24,10 +24,10 @@ function CharacterSection({
 }) {
   return (
     <div>
-      <h3 className="text-xs font-semibold text-[#A1A1AA] uppercase tracking-wider mb-1.5">
+      <h3 className="text-xs font-semibold text-[#A1A1AA] uppercase tracking-wider mb-1 lg:mb-1.5">
         {title}
       </h3>
-      <div className="grid grid-cols-9 gap-1">
+      <div className="grid grid-cols-9 gap-1 lg:grid-cols-8 lg:gap-2">
         {chars.map((char) => {
           const hasDrawing = (characters.get(char)?.length ?? 0) > 0;
           const isActive = activeCharacter === char;
@@ -35,12 +35,12 @@ function CharacterSection({
             <button
               key={char}
               onClick={() => onSelect(char)}
-              className={`aspect-square rounded-md text-sm font-medium transition-all flex items-center justify-center ${
+              className={`aspect-square rounded-md text-xs lg:text-sm font-medium transition-all flex items-center justify-center cursor-pointer p-0.5 lg:p-1 ${
                 isActive
                   ? 'bg-[#1A1A1A] text-white'
                   : hasDrawing
                     ? 'bg-[#D4714E] text-white'
-                    : 'text-[#A1A1AA] hover:bg-[#F4F4F5] hover:text-[#71717A] active:bg-[#EBEBEB] active:text-[#52525B]'
+                    : 'text-[#A1A1AA] hover:bg-[#D4D4D4] hover:text-[#71717A] active:bg-[#EBEBEB] active:text-[#52525B]'
               }`}
             >
               {char}
@@ -57,7 +57,7 @@ export default function CharacterGrid({ characters, activeCharacter, onSelect }:
   const total = UPPERCASE.length + LOWERCASE.length + DIGITS.length + SYMBOLS.length;
 
   return (
-    <div className="space-y-4 p-4 md:p-0 h-full flex flex-col">
+    <div className="space-y-3 lg:space-y-4 p-4 md:p-0 h-full flex flex-col">
       <div className="flex items-center justify-between shrink-0">
         <h2 className="text-base font-semibold text-[#1A1A1A]">Characters</h2>
         <span className="text-sm text-[#A1A1AA] tabular-nums">
@@ -72,7 +72,7 @@ export default function CharacterGrid({ characters, activeCharacter, onSelect }:
         />
       </div>
 
-      <div className="space-y-4 overflow-y-auto pr-1 scrollbar-thin flex-1 min-h-0">
+      <div className="space-y-3 lg:space-y-5 overflow-y-auto pr-1 scrollbar-thin flex-1 min-h-0">
         <CharacterSection title="Uppercase" chars={UPPERCASE} characters={characters} activeCharacter={activeCharacter} onSelect={onSelect} />
         <CharacterSection title="Lowercase" chars={LOWERCASE} characters={characters} activeCharacter={activeCharacter} onSelect={onSelect} />
         <CharacterSection title="Numbers" chars={DIGITS} characters={characters} activeCharacter={activeCharacter} onSelect={onSelect} />

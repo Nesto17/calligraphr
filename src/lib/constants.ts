@@ -1,7 +1,7 @@
 export const UPPERCASE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 export const LOWERCASE = 'abcdefghijklmnopqrstuvwxyz'.split('');
 export const DIGITS = '0123456789'.split('');
-export const SYMBOLS = '!@#$%^&*()-_,./?<>;:\'"\\|~'.split('');
+export const SYMBOLS = '!?@#$%^&*;:\'"\~-,.()/\\<>'.split('');
 export const ALL_CHARACTERS = [...UPPERCASE, ...LOWERCASE, ...DIGITS, ...SYMBOLS];
 
 export const CANVAS_SIZE = 500;
